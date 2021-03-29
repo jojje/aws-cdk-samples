@@ -1,51 +1,70 @@
 
-# Welcome to your CDK Python project!
+# Example of how WAFv2 rules can be managed using CDK
 
-This is a blank project for Python development with CDK.
+This example sets up a single instance with a demo app (nginx base-install), controlled by
+an ASG and surfaced using an ALB. It then adds a custom WAF-rule which blocks traffic using
+WAF if a query parameter named `blockme` is found in a request to the ALB.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+After deployment, a few handy URLs will be provided in the Cloudformation/CDK output, which
+allows you to experiment with the WAF behavior, and poke around in the WAF console for the
+generated WebACL.
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+The source code contains a mention of further resource / example to explore if you are
+interested in incorporating managed rules as well.
 
-To manually create a virtualenv on MacOS and Linux:
+The code of interest showing how to work with WAFv2 rules is found in
+[waf2/waf2_stack.py][1]
 
-```
-$ python3 -m venv .venv
-```
+## Setup
+1. Make sure you have [node.js][2] installed, since AWS Cloud Development Kit requires it regardless
+   of language you then elect to use for writing your stacks and constructs.
+    ```
+    npm install -g aws-cdk
+    ```
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+2. Create a python3 virtualenv which will contain the python specific dependencies in your workspace.
+    ```
+    $ python3 -m venv .venv
+    ```
 
-```
-$ source .venv/bin/activate
-```
+3.  After the init process completes and the virtualenv is created, you can use the following
+    step to activate your virtualenv on MacOS/Linux.
 
-If you are a Windows platform, you would activate the virtualenv like this:
+    ```
+    $ source .venv/bin/activate
+    ```
 
-```
-% .venv\Scripts\activate.bat
-```
+    If you are a Windows platform, you would activate the virtualenv like this:
 
-Once the virtualenv is activated, you can install the required dependencies.
+    ```
+    % .venv\Scripts\activate.bat
+    ```
 
-```
-$ pip install -r requirements.txt
-```
+4.  Once the virtualenv is activated, install the required python CDK dependencies.
 
+    ```
+    $ pip install -r requirements.txt
+    ```
+
+## Usage
 At this point you can now synthesize the CloudFormation template for this code.
 
 ```
 $ cdk synth
 ```
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
-command.
+To deploy the example, issue:
+
+```
+$ cdk deploy
+```
+
+To clean up / remove the deployed resources this project generated in your AWS account, issue:
+
+```
+$ cdk destroy
+```
+
 
 ## Useful commands
 
@@ -56,3 +75,7 @@ command.
  * `cdk docs`        open CDK documentation
 
 Enjoy!
+
+[1]: waf2/waf2_stack.py
+[2]: https://nodejs.org/en/download/
+
